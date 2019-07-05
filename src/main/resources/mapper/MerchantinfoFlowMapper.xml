@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaochong.loan.background.mapper.MerchantinfoFlowMapper">
+
+    <resultMap id="BaseResultMap" type="com.xiaochong.loan.background.entity.po.MerchantinfoFlow">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="merch_id" jdbcType="INTEGER" property="merchId" />
+        <result column="flow_no" jdbcType="VARCHAR" property="flowNo" />
+        <result column="flow_step" jdbcType="INTEGER" property="flowStep" />
+    </resultMap>
+
+	<sql id="Base_Column">
+		id,merch_id merchId,flow_no,flow_step
+	</sql>
+	
+	<select id="getLoanMerchantinfoFlow" parameterType="java.lang.String" resultType="com.xiaochong.loan.background.entity.po.MerchantinfoFlow">
+		select <include refid="Base_Column"/> from loan_merchant_info_flow where id = #{id}
+	</select>
+	
+	<insert id="insertLoanMerchantinfoFlow" parameterType="com.xiaochong.loan.background.entity.po.MerchantinfoFlow">
+		insert into loan_merchant_info_flow (id,merch_id,flow_no,flow_step) values (NULL ,#{merchId},#{flowNo},#{flowStep})
+	</insert>
+	
+	<update id="updateLoanMerchantinfoFlow" parameterType="com.xiaochong.loan.background.entity.po.MerchantinfoFlow">
+		update loan_merchant_info_flow set flow_no = #{flowNo} where id = #{id}
+	</update>
+
+    <update id="updateMerchantinfoFlowByMerchId" parameterType="com.xiaochong.loan.background.entity.po.MerchantinfoFlow">
+		update loan_merchant_info_flow set
+		 flow_no = #{flowNo} where merch_id = #{merchId}
+	</update>
+	
+	<delete id="deleteLoanMerchantinfoFlow" parameterType="java.lang.String">
+		 delete from loan_merchant_info_flow where id = #{id}
+	</delete>
+
+    <delete id="deleteMerchantinfoFlowByMerchId" parameterType="java.lang.Integer">
+		 delete from loan_merchant_info_flow where merch_id = #{merchId}
+	</delete>
+
+	<select id="getByMerchId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column"/> from loan_merchant_info_flow where merch_id = #{merchId}  ORDER BY flow_step
+	</select>
+
+	<select id="listByMerchantinfoFlow" parameterType="com.xiaochong.loan.background.entity.po.MerchantinfoFlow" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column" />
+		from loan_merchant_info_flow
+		where 1=1
+		<if test="id != null">
+			AND id = #{id,jdbcType=INTEGER}
+		</if>
+		<if test="merchId != null and merchId != ''">
+			AND merch_id = #{merchId,jdbcType=INTEGER}
+		</if>
+		<if test="flowNo != null and flowNo != ''">
+			AND flow_no = #{flowNo,jdbcType=VARCHAR}
+		</if>
+		<if test="flowStep != null and flowStep != ''">
+			AND flow_step = #{flowStep,jdbcType=INTEGER}
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaochong.loan.background.mapper.FieldMapper">
+
+	<resultMap id="BaseResultMap" type="com.xiaochong.loan.background.entity.po.Field">
+		<result column="id" property="id" jdbcType="VARCHAR"/>
+		<result column="field_text" property="fieldText" jdbcType="VARCHAR"/>
+		<result column="field_name" property="fieldName" jdbcType="VARCHAR"/>
+		<result column="field_type" property="fieldType" jdbcType="VARCHAR"/>
+		<result column="field_default_value" property="fieldDefaultValue" jdbcType="VARCHAR"/>
+		<result column="merch_id" property="merchId" jdbcType="VARCHAR"/>
+		<result column="type" property="type" jdbcType="VARCHAR"/>
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id,field_text,field_name,field_type,field_default_value,merch_id,type
+	</sql>
+
+	<insert id="insertLoanField" parameterType="com.xiaochong.loan.background.entity.po.Field">
+		insert into loan_field (id,field_text,field_name,type,field_type,field_default_value,merch_id)
+		values(NULL ,#{fieldText},#{fieldName},#{type},#{fieldType},#{fieldDefaultValue},#{merchId})
+	</insert>
+
+	<select id="findLoanFieldByMerid" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from loan_field where merch_id = #{merchId}
+	</select>
+	
+	<select id="findLoanFieldById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/> from loan_field where id = #{id}
+	</select>
+	
+	<select id="selectLoandField" parameterType="com.xiaochong.loan.background.entity.po.Field" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List"/>
+		FROM loan_field
+		WHERE 1=1
+		<if test="id ==1">
+			AND id = #{id}
+		</if>
+		<if test="fieldText != null and fieldText !=''">
+			AND field_text = #{fieldText}
+		</if>
+		<if test="fieldName != null and fieldName !=''">
+			AND field_name = #{fieldName}
+		</if>
+		<if test="fieldType != null and fieldType !=''">
+			AND field_type = #{fieldType}
+		</if>
+		<if test="fieldDefaultValue != null and fieldDefaultValue !=''">
+			AND field_default_value = #{fieldDefaultValue}
+		</if>
+		<if test="type != null and type !=''">
+			AND type = #{type}
+		</if>
+		<if test="merchId != null and merchId !=''">
+			AND merch_id = #{merchId}
+		</if>
+	</select>
+
+	<update id="updateLoanField" parameterType="com.xiaochong.loan.background.entity.po.Field">
+		update loan_field 
+		<set>
+			<if test="merchId != null">
+                merch_id = #{merchId},
+			</if>
+			<if test="fieldText != null">
+				field_text = #{fieldText},
+			</if>
+			<if test="fieldName != null">
+				field_name = #{fieldName},
+			</if>
+			<if test="type != null">
+				type = #{type},
+			</if>
+			<if test="fieldType != null">
+				field_type = #{fieldType},
+			</if>
+			<if test="fieldDefaultValue != null">
+				field_default_value = #{fieldDefaultValue},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="deleteLoanFieldByToid" parameterType="java.lang.String">
+		delete from loan_field where id = #{id}
+	</delete>
+	
+	<delete id="deleteLoanFieldByMerid" parameterType="java.lang.String">
+		delete from loan_field where merch_id = #{merchId}
+	</delete>
+</mapper>
